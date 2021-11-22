@@ -1,9 +1,12 @@
 const userModel = require("./../../db/models/userSchema");
 
+//sign up
 const signup = (req, res) => {
-  const { username, email, password } = req.body;
+
+  const { name, username, email, password } = req.body;
 
   const newUser = new userModel({
+    name,
     username,
     email,
     password,
@@ -12,60 +15,43 @@ const signup = (req, res) => {
   newUser
     .save()
     .then((result) => {
-      res.status(201).json(result);
+      res.status(201).send({ message: "User was registered successfully!" });
     })
     .catch((err) => {
       res.status(400).send(err);
     });
-
-  // let found = false;
-  // users.forEach((item) => {
-  //   if (email === item.email) {
-  //     found = true;
-  //   } else {
-  //     users.push({
-  //       id: users.length + 1,
-  //       username: username,
-  //       email: email,
-  //       password: password,
-  //       tasks: [],
-  //     });
-  //   }
-  // });
-  // if (found) {
-  //   res.status(404).json("username not available");
-  // } else {
-  //   createUser(users);
-  //   res.status(200).json("signin successfully").json(users);
-  // }
 };
 
+//sign in
 const signin = (req, res) => {
-  const { username, password } = req.body;
 
-  userModel
-    .find({})
-    .then((result) => {
-      res.status(201).send(result);
-    })
-    .catch((err) => {
-      res.status(400).send(err);
+  // Username
+  userModel.findOne({
+    username: req.body.username,
+  }).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    if (!user) {
+        return res.status(400).send({ message: "User Not found." });
+    }
+
+    // Password
+    userModel.findOne({
+      password: req.body.password,
+    }).exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(400).send({ message: "Invalid Password!" });
+      }
     });
-
-  // let found = false;
-  // let tasks = [];
-
-  // users.forEach((item) => {
-  //   if (username === item.username && password === item.password) {
-  //     found = true;
-  //     tasks = item.tasks.map((item) => item);
-  //   }
-  // });
-  // if (found) {
-  //   res.status(200).json("signin successfully", tasks);
-  // } else {
-  //   res.status(404).json("username or password was invalid");
-  // }
+  });
 };
 
 module.exports = {

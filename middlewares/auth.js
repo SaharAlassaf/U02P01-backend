@@ -1,5 +1,4 @@
 const User = require("../db/models/userSchema");
-// const User = userModel.user;
 
 const checkDuplicateUsernameOrEmail = (req, res, next) => {
     // Username

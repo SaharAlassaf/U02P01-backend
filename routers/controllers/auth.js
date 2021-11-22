@@ -54,6 +54,7 @@ const signin = (req, res) => {
           }
           res.status(200).send({
             id: user._id,
+            name: user.name,
             username: user.username,
             email: user.email,
           });
@@ -61,7 +62,40 @@ const signin = (req, res) => {
     });
 };
 
+const userProfile = (req, res) => {
+  userModel
+    .findOne({
+      id: req.body.id,
+    })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+// const updateProfile = (req, res) => {
+//     const { _id, name } = req.body;
+//   userModel.findOneAndUpdate({_id}, {name}, {new: true}).exec().then((result)=>{
+//       res.send(result)
+//   }).catch((err)=>{
+//       res.send(err)
+//   })
+// };
+
+const updateProfile = (req, res) => {
+    const { _id, name, username, email, password } = req.body;
+  userModel.findOneAndUpdate({_id}, {name, username, email, password}, {new: true}).exec().then((result)=>{
+      res.send(result)
+  }).catch((err)=>{
+      res.send(err)
+  })
+};
+
 module.exports = {
   signup,
   signin,
+  userProfile,
+  updateProfile,
 };

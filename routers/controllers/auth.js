@@ -62,6 +62,7 @@ const signin = (req, res) => {
     });
 };
 
+// user profile
 const userProfile = (req, res) => {
   userModel
     .findOne({
@@ -75,6 +76,7 @@ const userProfile = (req, res) => {
     });
 };
 
+// update user profile
 const updateProfile = (req, res) => {
   const { _id, name, username, email, password } = req.body;
   userModel
@@ -85,7 +87,7 @@ const updateProfile = (req, res) => {
     )
     .exec()
     .then((result) => {
-      res.send(result);
+      res.send({ message: "Updated successfully" });
     })
     .catch((err) => {
       res.send(err);

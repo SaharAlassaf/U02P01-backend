@@ -13,9 +13,30 @@ const budget = (req, res) => {
     });
 };
 
-const subscr = (req, res) => {};
+const subscr = (req, res) => {
+  subModel
+    .find({})
+    .select()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
-const subscrByID = (req, res) => {};
+const subscrByID = (req, res) => {
+  const { _id } = req.body;
+  subModel
+    .findById({ _id })
+    .select()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
 const updateBudget = (req, res) => {
   const { _id, budget } = req.body;
@@ -23,7 +44,7 @@ const updateBudget = (req, res) => {
     .findOneAndUpdate({ _id }, { budget }, { new: true })
     .exec()
     .then((result) => {
-      res.send(result);
+      res.send({ message: "Updated successfully" });
     })
     .catch((err) => {
       res.send(err);
@@ -33,7 +54,7 @@ const updateBudget = (req, res) => {
 const newSub = (req, res) => {
   const { subName, amount, frequency, subDate } = req.body;
 
-subModel
+  subModel
     .create({
       subName,
       amount,
@@ -43,7 +64,7 @@ subModel
     .then(function (newSub) {
       return userModel.findOneAndUpdate(
         { _id: req.body._id },
-        { $push: {sub: newSub._id} },
+        { $push: { sub: newSub._id } },
         { new: true }
       );
     })
@@ -55,9 +76,40 @@ subModel
     });
 };
 
-const updateSub = (req, res) => {};
+const updateSub = (req, res) => {
+  const { _id, subName, amount, frequency, subDate } = req.body;
+  subModel
+    .findOneAndUpdate(
+      { _id },
+      { subName, amount, frequency, subDate },
+      { new: true }
+    )
+    .exec()
+    .then(() => {
+      res.send({ message: "Updated successfully" });
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
-const deleteSub = (req, res) => {};
+const deleteSub = (req, res) => {
+  subModel
+    .findByIdAndRemove({ _id: req.body._id })
+    .then(async function (delSub) {
+      return await userModel.findOneAndUpdate(
+        { _id: req.body.id },
+        { $pull: { sub: req.body._id } },
+        { new: true }
+      );
+    })
+    .then(() => {
+      res.send({ message: "Deleted successfully" });
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
 module.exports = {
   budget,

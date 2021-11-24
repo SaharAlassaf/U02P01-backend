@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
 const cors = require("cors");
 require("./db")
 
@@ -13,13 +14,17 @@ app.use(express.json())
 
 //router level middleware
 const authRouter = require("./routers/routes/auth");
+const subRouter = require("./routers/routes/subscription");
 
 
 // routers
 app.use("/auth", authRouter);
+app.use("/subscr", subRouter);
+
 
 //built-in level middleware
 app.use(morgan("dev"));
+app.use(helmet());
 app.use(cors());
 
 

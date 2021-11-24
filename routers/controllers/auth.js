@@ -75,22 +75,21 @@ const userProfile = (req, res) => {
     });
 };
 
-// const updateProfile = (req, res) => {
-//     const { _id, name } = req.body;
-//   userModel.findOneAndUpdate({_id}, {name}, {new: true}).exec().then((result)=>{
-//       res.send(result)
-//   }).catch((err)=>{
-//       res.send(err)
-//   })
-// };
-
 const updateProfile = (req, res) => {
-    const { _id, name, username, email, password } = req.body;
-  userModel.findOneAndUpdate({_id}, {name, username, email, password}, {new: true}).exec().then((result)=>{
-      res.send(result)
-  }).catch((err)=>{
-      res.send(err)
-  })
+  const { _id, name, username, email, password } = req.body;
+  userModel
+    .findOneAndUpdate(
+      { _id },
+      { name, username, email, password },
+      { new: true }
+    )
+    .exec()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 };
 
 module.exports = {

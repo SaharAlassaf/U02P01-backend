@@ -1,6 +1,7 @@
 const userModel = require("./../../db/models/userSchema");
 const subModel = require("./../../db/models/subSchema");
 
+// get budget
 const budget = (req, res) => {
   userModel
     .find({})
@@ -13,6 +14,7 @@ const budget = (req, res) => {
     });
 };
 
+// get all subscription
 const subscr = (req, res) => {
   subModel
     .find({})
@@ -25,6 +27,7 @@ const subscr = (req, res) => {
     });
 };
 
+// get subscription by ID
 const subscrByID = (req, res) => {
   const { _id } = req.body;
   subModel
@@ -38,19 +41,23 @@ const subscrByID = (req, res) => {
     });
 };
 
+// update budget
 const updateBudget = (req, res) => {
-  const { _id, budget } = req.body;
+  const { id } = req.params;
+  const { budget } = req.body;
   userModel
-    .findOneAndUpdate({ _id }, { budget }, { new: true })
+    .findByIdAndUpdate( id ,  {$set:req.body} , { new: true })
     .exec()
     .then((result) => {
-      res.send({ message: "Updated successfully" });
+      res.send(result);
+      // res.send({ message: "Updated successfully" });
     })
     .catch((err) => {
       res.send(err);
     });
 };
 
+// create new subscription
 const newSub = (req, res) => {
   const { subName, amount, frequency, subDate } = req.body;
 
@@ -61,8 +68,8 @@ const newSub = (req, res) => {
       frequency,
       subDate,
     })
-    .then(function (newSub) {
-      return userModel.findOneAndUpdate(
+    .then(async function (newSub) {
+      return await userModel.findByIdAndUpdate(
         { _id: req.body._id },
         { $push: { sub: newSub._id } },
         { new: true }
@@ -76,10 +83,11 @@ const newSub = (req, res) => {
     });
 };
 
+// update subscription
 const updateSub = (req, res) => {
   const { _id, subName, amount, frequency, subDate } = req.body;
   subModel
-    .findOneAndUpdate(
+    .findByIdAndUpdate(
       { _id },
       { subName, amount, frequency, subDate },
       { new: true }
@@ -93,13 +101,16 @@ const updateSub = (req, res) => {
     });
 };
 
+// delete subscription
 const deleteSub = (req, res) => {
+  const { id, subId } = req.params;
+
   subModel
-    .findByIdAndRemove({ _id: req.body._id })
-    .then(async function (delSub) {
+    .findByIdAndRemove({ _id: id })
+    .then(async function () {
       return await userModel.findOneAndUpdate(
-        { _id: req.body.id },
-        { $pull: { sub: req.body._id } },
+        { _id: id },
+        { $pull: { sub: subId } },
         { new: true }
       );
     })

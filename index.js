@@ -17,15 +17,17 @@ const authRouter = require("./routers/routes/auth");
 const subRouter = require("./routers/routes/subscription");
 
 
-// routers
-app.use("/auth", authRouter);
-app.use("/subscr", subRouter);
-
-
 //built-in level middleware
 app.use(morgan("dev"));
 app.use(helmet());
+//cors should be before routers
 app.use(cors());
+app.options('*', cors())
+
+
+// routers
+app.use("/auth", authRouter);
+app.use("/subscr", subRouter);
 
 
 const PORT = process.env.PORT;

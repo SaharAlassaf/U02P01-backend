@@ -13,7 +13,7 @@ const signup = (req, res) => {
 
   newUser
     .save()
-    .then((result) => {
+    .then(() => {
       res.status(201).send({ message: "User was registered successfully!" });
     })
     .catch((err) => {
@@ -30,12 +30,12 @@ const signin = (req, res) => {
     })
     .exec((err, user) => {
       if (err) {
-        res.status(500).send({ message: err });
+        res.status(500).json({ message: err });
         return;
       }
 
       if (!user) {
-        return res.status(400).send({ message: "User Not found." });
+        return res.status(400).json({ message: "User Not found." });
       }
 
       // Password
@@ -45,29 +45,25 @@ const signin = (req, res) => {
         })
         .exec((err, user) => {
           if (err) {
-            res.status(500).send({ message: err });
+            res.status(500).json({ message: err });
             return;
           }
 
           if (!user) {
-            return res.status(400).send({ message: "Invalid Password!" });
+            return res.status(400).json({ message: "Invalid Password!" });
           }
-          res.status(200).send({
-            id: user._id,
-            name: user.name,
-            username: user.username,
-            email: user.email,
-          });
+          res.status(200).json(user);
         });
     });
 };
 
 // user profile
 const userProfile = (req, res) => {
+  const { id } = req.params;
   userModel
-    .findOne({
-      id: req.body.id,
-    })
+    .findById(id)
+    .populate("sub")
+    .exec()
     .then((result) => {
       res.send(result);
     })
@@ -76,17 +72,33 @@ const userProfile = (req, res) => {
     });
 };
 
+// get subs for the user
+const getSubsForUser = (req, res) => {
+  userModel
+    .findById({
+      _id: req.body.id,
+    })
+    .populate("sub")
+    .exec()
+    .then((result) => {
+      res.send(result.sub);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
 // update user profile
 const updateProfile = (req, res) => {
-  const { _id, name, username, email, password } = req.body;
+  const { id, name, username, email, password } = req.body;
   userModel
     .findOneAndUpdate(
-      { _id },
+      { id },
       { name, username, email, password },
       { new: true }
     )
     .exec()
-    .then((result) => {
+    .then(() => {
       res.send({ message: "Updated successfully" });
     })
     .catch((err) => {
@@ -99,4 +111,5 @@ module.exports = {
   signin,
   userProfile,
   updateProfile,
+  getSubsForUser,
 };

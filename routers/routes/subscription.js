@@ -14,9 +14,9 @@ const subscription = express.Router();
 subscription.get("/budget", budget);
 subscription.get("/subscr", subscr);
 subscription.get("/subscrByID", subscrByID);
-subscription.put("/updateBudget", updateBudget);
+subscription.put("/updateBudget/:id", updateBudget);
 subscription.post("/newSub", newSub);
 subscription.put("/updateSub", updateSub);
-subscription.delete("/deleteSub", deleteSub);
+subscription.delete("/deleteSub/:id/:subId", deleteSub);
 
 module.exports = subscription;

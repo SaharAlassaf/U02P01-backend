@@ -11,9 +11,8 @@ const {
 
 const subscription = express.Router();
 
-subscription.get("/budget", budget);
-subscription.get("/subscr", subscr);
-subscription.get("/subscrByID", subscrByID);
+// subscription.get("/budget", budget);
+// subscription.get("/subscrByID", subscrByID);
 subscription.put("/updateBudget/:id", updateBudget);
 subscription.post("/newSub", newSub);
 subscription.put("/updateSub", updateSub);

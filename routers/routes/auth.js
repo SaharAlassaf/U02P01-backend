@@ -14,7 +14,7 @@ auth.post("/signup", checkDuplicateUsernameOrEmail, signup);
 auth.post("/signin", signin);
 auth.get("/profile/:id", userProfile);
 auth.put("/updateProfile", checkDuplicateUsernameOrEmail, updateProfile);
-auth.get("/subs", getSubsForUser);
+// auth.get("/subs", getSubsForUser);
 
 
 module.exports = auth;

@@ -2,44 +2,32 @@ const userModel = require("./../../db/models/userSchema");
 const subModel = require("./../../db/models/subSchema");
 
 // get budget
-const budget = (req, res) => {
-  userModel
-    .find({})
-    .select("budget")
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
+// const budget = (req, res) => {
+//   userModel
+//     .find({})
+//     .select("budget")
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       res.send(err);
+//     });
+// };
 
-// get all subscription
-const subscr = (req, res) => {
-  subModel
-    .find({})
-    .select()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
 
 // get subscription by ID
-const subscrByID = (req, res) => {
-  const { _id } = req.body;
-  subModel
-    .findById({ _id })
-    .select()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
+// const subscrByID = (req, res) => {
+//   const { _id } = req.body;
+//   subModel
+//     .findById({ _id })
+//     .select()
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       res.send(err);
+//     });
+// };
 
 // update budget
 const updateBudget = (req, res) => {

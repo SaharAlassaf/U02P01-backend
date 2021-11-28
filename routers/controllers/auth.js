@@ -73,20 +73,20 @@ const userProfile = (req, res) => {
 };
 
 // get subs for the user
-const getSubsForUser = (req, res) => {
-  userModel
-    .findById({
-      _id: req.body.id,
-    })
-    .populate("sub")
-    .exec()
-    .then((result) => {
-      res.send(result.sub);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
+// const getSubsForUser = (req, res) => {
+//   userModel
+//     .findById({
+//       _id: req.body.id,
+//     })
+//     .populate("sub")
+//     .exec()
+//     .then((result) => {
+//       res.send(result.sub);
+//     })
+//     .catch((err) => {
+//       res.send(err);
+//     });
+// };
 
 // update user profile
 const updateProfile = (req, res) => {
